@@ -19,22 +19,22 @@ describe('AboutTab', () => {
     expect(screen.getByText('v2.9.10')).toBeInTheDocument();
   });
 
-  it('FE-COMP-ABOUT-003: displays Ko-fi link with correct href', () => {
+  it('FE-COMP-ABOUT-003: displays Momo link with correct href', () => {
+    render(<AboutTab appVersion="2.9.10" />);
+    const link = screen.getByText('Momo').closest('a');
+    expect(link).toHaveAttribute('href', 'https://me.momo.vn/1MIVTysqCOUBidTRfdU3Iv/QBeXQBKXOgwlayK');
+  });
+
+  it('FE-COMP-ABOUT-004: displays Ko-fi link with correct href', () => {
     render(<AboutTab appVersion="2.9.10" />);
     const link = screen.getByText('Ko-fi').closest('a');
-    expect(link).toHaveAttribute('href', 'https://ko-fi.com/mauriceboe');
+    expect(link).toHaveAttribute('href', 'https://ko-fi.com/vantrungle');
   });
 
-  it('FE-COMP-ABOUT-004: displays Buy Me a Coffee link with correct href', () => {
+  it('FE-COMP-ABOUT-005: displays Buy Me a Coffee link with correct href', () => {
     render(<AboutTab appVersion="2.9.10" />);
     const link = screen.getByText('Buy Me a Coffee').closest('a');
-    expect(link).toHaveAttribute('href', 'https://buymeacoffee.com/mauriceboe');
-  });
-
-  it('FE-COMP-ABOUT-005: displays Discord link with correct href', () => {
-    render(<AboutTab appVersion="2.9.10" />);
-    const link = screen.getByText('Discord').closest('a');
-    expect(link).toHaveAttribute('href', 'https://discord.gg/NhZBDSd4qW');
+    expect(link).toHaveAttribute('href', 'https://buymeacoffee.com/sherwinvn');
   });
 
   it('FE-COMP-ABOUT-006: displays bug report link', () => {
@@ -43,13 +43,13 @@ describe('AboutTab', () => {
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute(
       'href',
-      'https://github.com/mauriceboe/TREK/issues/new?template=bug_report.yml',
+      'https://github.com/SherwinVN/VNTREK/issues/new?template=bug_report.yml',
     );
   });
 
   it('FE-COMP-ABOUT-007: displays feature request link', () => {
     render(<AboutTab appVersion="2.9.10" />);
-    const link = document.querySelector('a[href*="discussions/new"]');
+    const link = document.querySelector('a[href*="feature_request"]');
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute('target', '_blank');
   });
@@ -63,7 +63,7 @@ describe('AboutTab', () => {
   it('FE-COMP-ABOUT-009: all external links have rel="noopener noreferrer"', () => {
     render(<AboutTab appVersion="2.9.10" />);
     const links = document.querySelectorAll('a');
-    expect(links).toHaveLength(6);
+    expect(links).toHaveLength(9);
     links.forEach((link) => {
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
     });

@@ -16,7 +16,7 @@ const notifications: TranslationStrings = {
   'notifications.synologySessionCleared.title': 'Đã ngắt kết nối Synology Photos',
   'notifications.synologySessionCleared.text': 'Máy chủ hoặc tài khoản của bạn đã thay đổi — hãy vào Cài đặt để kiểm tra kết nối lại.',
   'notifications.versionAvailable.title': 'Có bản cập nhật',
-  'notifications.versionAvailable.text': 'TREK {version} hiện đã có sẵn.',
+  'notifications.versionAvailable.text': 'VNTrek {version} hiện đã có sẵn.',
   'notifications.versionAvailable.button': 'Xem Chi tiết',
   'notifications.test.title': 'Thông báo kiểm tra từ {actor}',
   'notifications.test.text': 'Đây là thông báo kiểm tra đơn giản.',

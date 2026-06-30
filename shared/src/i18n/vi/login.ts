@@ -26,7 +26,7 @@ const login: TranslationStrings = {
   'login.signingIn': 'Đang đăng nhập…',
   'login.signIn': 'Đăng nhập',
   'login.createAdmin': 'Tạo Tài khoản Quản trị',
-  'login.createAdminHint': 'Thiết lập tài khoản quản trị đầu tiên cho TREK.',
+  'login.createAdminHint': 'Thiết lập tài khoản quản trị đầu tiên cho VNTrek.',
   'login.setNewPassword': 'Đặt Mật khẩu Mới',
   'login.setNewPasswordHint': 'Bạn phải đổi mật khẩu trước khi tiếp tục.',
   'login.createAccount': 'Tạo Tài khoản',

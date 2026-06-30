@@ -22,7 +22,7 @@ const notif: TranslationStrings = {
   'notif.packing_tagged.title': 'Phân công Đóng gói',
   'notif.packing_tagged.text': '{actor} đã gán bạn vào {category} trong {trip}',
   'notif.version_available.title': 'Phiên bản Mới',
-  'notif.version_available.text': 'TREK {version} hiện đã có sẵn',
+  'notif.version_available.text': 'VNTrek {version} hiện đã có sẵn',
   'notif.action.view_trip': 'Xem Chuyến đi',
   'notif.action.view_collab': 'Xem Tin nhắn',
   'notif.action.view_packing': 'Xem Đóng gói',

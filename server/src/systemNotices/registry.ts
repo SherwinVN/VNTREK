@@ -51,12 +51,12 @@ export const SYSTEM_NOTICES: SystemNotice[] = [
     cta: {
       kind: 'link',
       labelKey: 'system_notice.thank_you_support.cta_bmc',
-      href: 'https://buymeacoffee.com/mauriceboe',
+      href: 'https://me.momo.vn/1MIVTysqCOUBidTRfdU3Iv/QBeXQBKXOgwlayK',
     },
     secondaryCta: {
       kind: 'link',
       labelKey: 'system_notice.thank_you_support.cta_kofi',
-      href: 'https://ko-fi.com/mauriceboe',
+      href: 'https://ko-fi.com/vantrungle',
     },
     dismissible: true,
     // Desktop-only: the support modal is suppressed on small/mobile viewports.

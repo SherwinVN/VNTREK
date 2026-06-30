@@ -2,10 +2,10 @@ import type { NotificationLocale } from '../externalNotifications/types';
 
 const vi: NotificationLocale = {
   email: {
-    footer: 'Bạn nhận được email này vì đã bật thông báo trong TREK.',
+    footer: 'Bạn nhận được email này vì đã bật thông báo trong VNTrek.',
     manage: 'Quản lý tùy chọn trong Cài đặt',
     madeWith: 'Được tạo bằng',
-    openTrek: 'Mở TREK',
+    openTrek: 'Mở VNTrek',
   },
   events: {
     trip_invite: (p) => ({
@@ -26,7 +26,7 @@ const vi: NotificationLocale = {
     }),
     vacay_invite: (p) => ({
       title: 'Lời mời Kết hợp Kỳ nghỉ',
-      body: `${p.actor} đã mời bạn kết hợp kế hoạch kỳ nghỉ. Mở TREK để chấp nhận hoặc từ chối.`,
+      body: `${p.actor} đã mời bạn kết hợp kế hoạch kỳ nghỉ. Mở VNTrek để chấp nhận hoặc từ chối.`,
     }),
     photos_shared: (p) => ({
       title: `${p.count} ảnh đã được chia sẻ`,
@@ -41,8 +41,8 @@ const vi: NotificationLocale = {
       body: `${p.actor} đã gán bạn vào danh mục đóng gói "${p.category}" trong "${p.trip}".`,
     }),
     version_available: (p) => ({
-      title: 'Phiên bản TREK mới có sẵn',
-      body: `TREK ${p.version} hiện đã có sẵn. Truy cập bảng quản trị để cập nhật.`,
+      title: 'Phiên bản VNTrek mới có sẵn',
+      body: `VNTrek ${p.version} hiện đã có sẵn. Truy cập bảng quản trị để cập nhật.`,
     }),
     synology_session_cleared: () => ({
       title: 'Đã xóa phiên Synology',
@@ -52,7 +52,7 @@ const vi: NotificationLocale = {
   passwordReset: {
     subject: 'Đặt lại mật khẩu của bạn',
     greeting: 'Xin chào',
-    body: 'Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản TREK của bạn. Nhấp vào nút bên dưới để đặt mật khẩu mới.',
+    body: 'Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản VNTrek của bạn. Nhấp vào nút bên dưới để đặt mật khẩu mới.',
     ctaIntro: 'Đặt lại mật khẩu',
     expiry: 'Liên kết này hết hạn sau 60 phút.',
     ignore: 'Nếu bạn không yêu cầu điều này, bạn có thể yên tâm bỏ qua email này — mật khẩu của bạn sẽ không thay đổi.',
