@@ -6,6 +6,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { useSettingsStore } from '../../store/settingsStore'
 import { isStandardFamily, supportsCustom3d, wantsTerrain, addCustom3dBuildings, addTerrainAndSky } from '../Map/mapboxSetup'
 import { MAPBOX_DEFAULT_STYLE, styleForActiveProvider, basemapLanguage, type GlMapProvider } from '../Map/glProviders'
+import { addVnBoundaryToGlMap } from '../Map/VnBoundaryOverlay'
 
 export interface JourneyMapGLHandle {
   highlightMarker: (id: string | null) => void
@@ -407,6 +408,8 @@ const JourneyMapGL = forwardRef<JourneyMapGLHandle, Props>(function JourneyMapGL
           })
         }
       }
+
+      addVnBoundaryToGlMap(map)
 
       // markers
       items.forEach((item) => {

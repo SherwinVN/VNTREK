@@ -62,7 +62,7 @@ if (vnIdx === -1) {
 const vnFeature = adm0.features[vnIdx]
 const vnCoords = vnFeature.geometry.type === 'MultiPolygon'
   ? vnFeature.geometry.coordinates
-  : [vnFeature.geometry.coordinates] // wrap Polygon in array
+  : [vnFeature.geometry.coordinates]
 
 // Find island features in vn_provinces
 const islandNames = ['Đặc khu Hoàng Sa', 'Đặc khu Trường Sa']
@@ -81,6 +81,19 @@ for (const islandName of islandNames) {
   const islandCoords = qGeom.type === 'MultiPolygon'
     ? qGeom.coordinates
     : [qGeom.coordinates]
+
+  // Check if islands are already merged (idempotent) — compare first ring coords
+  const firstRingCoord = islandCoords[0]?.[0]?.[0]
+  if (firstRingCoord) {
+    const alreadyMerged = vnCoords.some(p =>
+      p[0]?.[0]?.[0] === firstRingCoord[0] && p[0]?.[0]?.[1] === firstRingCoord[1]
+    )
+    if (alreadyMerged) {
+      console.log(`  "${islandName}" already merged, skipping`)
+      continue
+    }
+  }
+
   for (const poly of islandCoords) {
     vnCoords.push(poly)
   }
@@ -104,3 +117,11 @@ const totalIslands = islandNames.length
 console.log(`Patched admin0.geojson.gz — merged ${addedCount}/${totalIslands} islands into Vietnam (VNM)`)
 console.log(`Vietnam now has ${vnCoords.length} polygon groups`)
 console.log(`File size: ${(gz.length / 1e6).toFixed(2)} MB gzipped`)
+
+// Also write a lightweight vn_boundary.geojson.gz with just the VNM feature,
+// used by non-atlas maps for a static non-interactive overlay.
+const vnFc = { type: 'FeatureCollection', features: [vnFeature] }
+const vnGz = zlib.gzipSync(Buffer.from(JSON.stringify(vnFc)), { level: 9 })
+const vnBoundaryFile = path.join(ATLAS_DIR, 'vn_boundary.geojson.gz')
+fs.writeFileSync(vnBoundaryFile, vnGz)
+console.log(`[atlas-geo] wrote vn_boundary.geojson.gz — 1 feature (VNM with islands), ${(vnGz.length / 1e3).toFixed(0)} KB gz`)

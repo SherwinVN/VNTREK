@@ -5,6 +5,7 @@ import maplibregl from 'maplibre-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useSettingsStore } from '../../store/settingsStore'
+import { addVnBoundaryToGlMap } from './VnBoundaryOverlay'
 import { useAuthStore } from '../../store/authStore'
 import { getCached, isLoading, fetchPhoto, onThumbReady, getAllThumbs } from '../../services/photoService'
 import { CATEGORY_ICON_MAP } from '../shared/categoryIcons'
@@ -308,6 +309,8 @@ export function MapViewGL({
           layout: { 'line-cap': 'round', 'line-join': 'round' },
         })
       }
+      addVnBoundaryToGlMap(map)
+
       // Signal that sources/layers are attached so overlay effects can
       // safely add their own sources. Style rebuilds reset this via the
       // cleanup below.

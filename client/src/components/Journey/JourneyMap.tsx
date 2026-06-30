@@ -1,6 +1,7 @@
 import { useEffect, useRef, useImperativeHandle, forwardRef, useCallback } from 'react'
 import L from 'leaflet'
 import { useSettingsStore } from '../../store/settingsStore'
+import { addVnBoundaryToMap } from '../Map/VnBoundaryOverlay'
 
 export interface MapMarkerItem {
   id: string
@@ -168,6 +169,8 @@ const JourneyMap = forwardRef<JourneyMapHandle, Props>(function JourneyMap(
       touchZoom: true,
     })
     mapRef.current = map
+
+    addVnBoundaryToMap(map)
 
     const defaultTile = dark
       ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'

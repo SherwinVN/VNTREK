@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { MapContainer, TileLayer, Marker, Tooltip, useMap } from 'react-leaflet'
+import VnBoundaryOverlay from '../components/Map/VnBoundaryOverlay'
 import L from 'leaflet'
 import { useTranslation, SUPPORTED_LANGUAGES } from '../i18n'
 import { useSettingsStore } from '../store/settingsStore'
@@ -166,6 +167,7 @@ export default function SharedTripPage() {
           <MapContainer center={center as [number, number]} zoom={11} zoomControl={false} style={{ width: '100%', height: '100%' }}>
             <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" referrerPolicy="strict-origin-when-cross-origin" />
             <FitBoundsToPlaces places={mapPlaces} />
+            <VnBoundaryOverlay />
             {mapPlaces.map((p: any) => (
               <Marker key={p.id} position={[p.lat, p.lng]} icon={createMarkerIcon(p)}>
                 <Tooltip>{p.name}</Tooltip>

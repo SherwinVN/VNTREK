@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useMemo, useCallback, createElement, memo 
 import DOM from 'react-dom'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { MapContainer, TileLayer, Marker, Polyline, CircleMarker, Circle, useMap, Tooltip } from 'react-leaflet'
+import VnBoundaryOverlay from './VnBoundaryOverlay'
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import L from 'leaflet'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
@@ -598,6 +599,8 @@ export const MapView = memo(function MapView({
       <MapContextMenuHandler onContextMenu={onMapContextMenu} />
       <ViewportController onViewportChange={onViewportChange} />
       <LeafletLocationLayer position={userPosition} mode={trackingMode} />
+
+      <VnBoundaryOverlay />
 
       <MarkerClusterGroup
         chunkedLoading

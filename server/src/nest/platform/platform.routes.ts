@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import path from 'node:path';
 import fs from 'node:fs';
+import zlib from 'node:zlib';
 
 import { verifyJwtAndLoadUser } from '../../middleware/auth';
 import { db } from '../../db/database';
@@ -56,6 +57,17 @@ export function applyPlatformUploads(app: express.Application): void {
   app.use('/uploads/avatars', express.static(path.join(UPLOADS_DIR, 'avatars')));
   app.use('/uploads/covers', express.static(path.join(UPLOADS_DIR, 'covers')));
   app.use('/uploads/journey', express.static(path.join(UPLOADS_DIR, 'journey')));
+  app.get('/api/static/atlas/vn_boundary.json', (req: Request, res: Response) => {
+    const gzPath = path.join(__dirname, '..', '..', '..', 'assets', 'atlas', 'vn_boundary.geojson.gz');
+    if (!fs.existsSync(gzPath)) { res.status(404).json({ error: 'Not found' }); return }
+    try {
+      const gz = fs.readFileSync(gzPath);
+      const json = zlib.gunzipSync(gz).toString('utf8');
+      res.set('Cache-Control', 'public, max-age=86400');
+      res.set('Content-Type', 'application/json');
+      res.send(json);
+    } catch { res.status(500).json({ error: 'Failed to load' }) }
+  });
 
   // Photos require either a valid logged-in session (via JWT with the
   // password_version gate) OR a share token that covers the SPECIFIC

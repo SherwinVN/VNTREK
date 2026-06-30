@@ -263,6 +263,11 @@ async function main() {
           adm0Features[vnIdx] = vn
           write('admin0', adm0Features) // re-write with islands
           console.log(`[atlas-geo] merged 2 islands into VNM (${vnCoords.length} polygon groups)`)
+          // Write lightweight vn_boundary.geojson.gz for non-atlas maps
+          const vnFc = { type: 'FeatureCollection', features: [vn] }
+          const vnGz = zlib.gzipSync(Buffer.from(JSON.stringify(vnFc)), { level: 9 })
+          fs.writeFileSync(path.join(OUT_DIR, 'vn_boundary.geojson.gz'), vnGz)
+          console.log(`[atlas-geo] wrote vn_boundary.geojson.gz — 1 feature, ${(vnGz.length / 1e3).toFixed(0)} KB gz`)
         }
       }
     }
