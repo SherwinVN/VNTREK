@@ -58,12 +58,12 @@ describe('GitHubPanel', () => {
     await waitFor(() => expect(screen.queryByText('Loading...')).not.toBeInTheDocument());
 
     const kofi = screen.getByText('Ko-fi').closest('a')!;
-    expect(kofi).toHaveAttribute('href', 'https://ko-fi.com/mauriceboe');
+    expect(kofi).toHaveAttribute('href', 'https://ko-fi.com/vantrungle');
     expect(kofi).toHaveAttribute('target', '_blank');
     expect(kofi).toHaveAttribute('rel', 'noopener noreferrer');
 
     const bmc = screen.getByText('Buy Me a Coffee').closest('a')!;
-    expect(bmc).toHaveAttribute('href', 'https://buymeacoffee.com/mauriceboe');
+    expect(bmc).toHaveAttribute('href', 'https://buymeacoffee.com/sherwinvn');
     expect(bmc).toHaveAttribute('target', '_blank');
     expect(bmc).toHaveAttribute('rel', 'noopener noreferrer');
 

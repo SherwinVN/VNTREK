@@ -99,9 +99,9 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'TREK \u2014 Travel Planner',
-        short_name: 'TREK',
-        description: 'Travel Resource & Exploration Kit',
+        name: 'VNTrek — Khám Phá Việt Nam',
+        short_name: 'VNTrek',
+        description: 'Khám Phá Việt Nam — Ứng dụng lập kế hoạch du lịch',
         theme_color: '#111827',
         background_color: '#0f172a',
         display: 'standalone',
