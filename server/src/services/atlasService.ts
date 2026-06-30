@@ -191,6 +191,11 @@ async function throttleNominatim() {
 }
 
 export async function reverseGeocodeCountry(lat: number, lng: number): Promise<string | null> {
+  // Hoàng Sa / Trường Sa — override Nominatim which returns China for these coordinates
+  if ((lat >= 15.5 && lat <= 17.5 && lng >= 110.5 && lng <= 113.0) ||
+      (lat >= 6.0 && lat <= 12.0 && lng >= 111.0 && lng <= 116.0)) {
+    return 'VN';
+  }
   const key = roundKey(lat, lng);
   if (geocodeCache.has(key)) return geocodeCache.get(key)!;
   await throttleNominatim();
@@ -253,6 +258,11 @@ function getCountryPolyIndex(): Map<string, { type: string; coordinates: number[
 }
 
 export function getCountryFromCoords(lat: number, lng: number): string | null {
+  // Hoàng Sa / Trường Sa — override to ensure these sovereign Vietnamese island groups are mapped to Vietnam (VN)
+  if ((lat >= 15.5 && lat <= 17.5 && lng >= 110.5 && lng <= 113.0) ||
+      (lat >= 6.0 && lat <= 12.0 && lng >= 111.0 && lng <= 116.0)) {
+    return 'VN';
+  }
   // Cheap prefilter: every country whose bounding box contains the point.
   const candidates: { code: string; area: number }[] = [];
   for (const [code, [minLng, minLat, maxLng, maxLat]] of Object.entries(COUNTRY_BOXES)) {
@@ -294,6 +304,12 @@ export function getCountryFromAddress(address: string | null): string | null {
 // ── Resolve a place to a country code (address -> bbox -> geocode) ──────────
 
 async function resolveCountryCode(place: Place): Promise<string | null> {
+  if (place.lat && place.lng) {
+    if ((place.lat >= 15.5 && place.lat <= 17.5 && place.lng >= 110.5 && place.lng <= 113.0) ||
+        (place.lat >= 6.0 && place.lat <= 12.0 && place.lng >= 111.0 && place.lng <= 116.0)) {
+      return 'VN';
+    }
+  }
   let code = getCountryFromAddress(place.address);
   if (!code && place.lat && place.lng) {
     code = getCountryFromCoords(place.lat, place.lng);
@@ -305,6 +321,12 @@ async function resolveCountryCode(place: Place): Promise<string | null> {
 }
 
 function resolveCountryCodeSync(place: Place): string | null {
+  if (place.lat && place.lng) {
+    if ((place.lat >= 15.5 && place.lat <= 17.5 && place.lng >= 110.5 && place.lng <= 113.0) ||
+        (place.lat >= 6.0 && place.lat <= 12.0 && place.lng >= 111.0 && place.lng <= 116.0)) {
+      return 'VN';
+    }
+  }
   let code = getCountryFromAddress(place.address);
   if (!code && place.lat && place.lng) {
     code = getCountryFromCoords(place.lat, place.lng);
@@ -345,6 +367,13 @@ function resolvePlaceCountries(places: Place[]): Map<number, string> {
 
   const uncachedForGeocode: Place[] = [];
   for (const p of places) {
+    if (p.lat && p.lng) {
+      if ((p.lat >= 15.5 && p.lat <= 17.5 && p.lng >= 110.5 && p.lng <= 113.0) ||
+          (p.lat >= 6.0 && p.lat <= 12.0 && p.lng >= 111.0 && p.lng <= 116.0)) {
+        out.set(p.id, 'VN');
+        continue;
+      }
+    }
     const fromDb = cachedMap.get(p.id);
     if (fromDb) { out.set(p.id, fromDb); continue; }
     const sync = resolveCountryCodeSync(p);

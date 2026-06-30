@@ -140,6 +140,12 @@ function normalizeAdm0Feature(f) {
   const a3 = f.properties?.shapeGroup
   if (!a3) return null
   const name = f.properties?.shapeName || a3
+
+  // Exclude disputed Paracel and Spratly Islands standalone features since they are merged into VNM
+  if (a3 === '125' || name.toLowerCase().includes('paracel') || name.toLowerCase().includes('spratly') || name.toLowerCase().includes('hoàng sa') || name.toLowerCase().includes('trường sa')) {
+    return null
+  }
+
   const geometry = quantizeGeometry(f.geometry, ADM0_DECIMALS)
   if (!geometry) return null
   return {

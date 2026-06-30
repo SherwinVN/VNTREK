@@ -154,6 +154,27 @@ export function getMapsKey(userId: number): string | null {
 
 // ── Nominatim search ─────────────────────────────────────────────────────────
 
+// ── Vietnam island address override ──────────────────────────────────────────
+// Nominatim/OSM treats Hoàng Sa (Paracel) and Trường Sa (Spratly) as Chinese
+// territory. Override the address so search/reverse-geocode returns Vietnamese
+// context for these sovereign Vietnamese island groups.
+
+const VN_ISLAND_ZONES: { name: string; addr: string; minLat: number; maxLat: number; minLng: number; maxLng: number }[] = [
+  // Hoàng Sa (Paracel) — ~16.0–17.5°N, 110.5–113.0°E
+  { name: 'Quần đảo Hoàng Sa', addr: 'Quần đảo Hoàng Sa, Thành phố Đà Nẵng, Việt Nam', minLat: 15.5, maxLat: 17.5, minLng: 110.5, maxLng: 113.0 },
+  // Trường Sa (Spratly) — ~6.0–12.0°N, 111.0–116.0°E
+  { name: 'Quần đảo Trường Sa', addr: 'Quần đảo Trường Sa, Tỉnh Khánh Hòa, Việt Nam', minLat: 6.0, maxLat: 12.0, minLng: 111.0, maxLng: 116.0 },
+]
+
+function vnIslandFor(lat: number, lng: number): { name: string; address: string } | null {
+  for (const zone of VN_ISLAND_ZONES) {
+    if (lat >= zone.minLat && lat <= zone.maxLat && lng >= zone.minLng && lng <= zone.maxLng) {
+      return { name: zone.name, address: zone.addr }
+    }
+  }
+  return null
+}
+
 export async function searchNominatim(query: string, lang?: string) {
   const params = new URLSearchParams({
     q: query,
@@ -170,19 +191,24 @@ export async function searchNominatim(query: string, lang?: string) {
     throw new Error(`Nominatim API error: ${response.status} ${response.statusText}${text ? ' - ' + text.substring(0, 200) : ''}`);
   }
   const data = await response.json() as NominatimResult[];
-  return data.map(item => ({
-    google_place_id: null,
-    google_ftid: null,
-    osm_id: `${item.osm_type}:${item.osm_id}`,
-    name: item.name || item.display_name?.split(',')[0] || '',
-    address: item.display_name || '',
-    lat: parseFloat(item.lat) || null,
-    lng: parseFloat(item.lon) || null,
-    rating: null,
-    website: null,
-    phone: null,
-    source: 'openstreetmap',
-  }));
+  return data.map(item => {
+    const lat = parseFloat(item.lat) || null
+    const lng = parseFloat(item.lon) || null
+    const vn = lat !== null && lng !== null ? vnIslandFor(lat, lng) : null
+    return {
+      google_place_id: null,
+      google_ftid: null,
+      osm_id: `${item.osm_type}:${item.osm_id}`,
+      name: vn?.name || item.name || item.display_name?.split(',')[0] || '',
+      address: vn?.address || item.display_name || '',
+      lat,
+      lng,
+      rating: null,
+      website: null,
+      phone: null,
+      source: 'openstreetmap',
+    }
+  });
 }
 
 // ── Nominatim lookup (by OSM ID) ────────────────────────────────────────────
@@ -204,11 +230,14 @@ export async function lookupNominatim(osmType: string, osmId: string, lang?: str
     const data = await res.json() as NominatimResult[];
     const item = data[0];
     if (!item) return null;
+    const lat = parseFloat(item.lat) || null
+    const lng = parseFloat(item.lon) || null
+    const vn = lat !== null && lng !== null ? vnIslandFor(lat, lng) : null
     return {
-      name: item.name || item.display_name?.split(',')[0] || '',
-      address: item.display_name || '',
-      lat: parseFloat(item.lat) || null,
-      lng: parseFloat(item.lon) || null,
+      name: vn?.name || item.name || item.display_name?.split(',')[0] || '',
+      address: vn?.address || item.display_name || '',
+      lat,
+      lng,
     };
   } catch { return null; }
 }
@@ -1038,6 +1067,8 @@ export async function reverseGeocode(lat: string, lng: string, lang?: string): P
   });
   if (!response.ok) return { name: null, address: null };
   const data = await response.json() as { name?: string; display_name?: string; address?: Record<string, string> };
+  const vn = vnIslandFor(parseFloat(lat), parseFloat(lng))
+  if (vn) return { name: vn.name, address: vn.address }
   const addr = data.address || {};
   const name = data.name || addr.tourism || addr.amenity || addr.shop || addr.building || addr.road || null;
   return { name, address: data.display_name || null };
