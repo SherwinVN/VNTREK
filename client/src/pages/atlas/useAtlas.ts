@@ -483,7 +483,7 @@ export function useAtlas() {
           color: dark ? '#555' : '#94a3b8',
           weight: 1,
         }
-        if (countryA2 === 'VN') { s.color = '#ef4444'; s.weight = 2 }
+        if (countryA2 === 'VN') { s.color = '#ef4444'; s.weight = 1 }
         return s
       },
       onEachFeature: (feature, layer) => {
