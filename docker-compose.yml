@@ -1,7 +1,9 @@
 services:
   app:
-    image: sherwinvn/vntrek:dev
+    image: sherwinvn/vntrek:latest
     container_name: trek
+    env_file:
+      - .env
     read_only: true
     security_opt:
       - no-new-privileges:true
@@ -14,7 +16,7 @@ services:
     tmpfs:
       - /tmp:noexec,nosuid,size=128m
     ports:
-      - "3000:3000"
+      - "${PORT:-3000}:3000"
     environment:
       - NODE_ENV=production
       - PORT=3000
