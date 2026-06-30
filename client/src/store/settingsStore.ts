@@ -23,8 +23,8 @@ export const hasStoredLanguage = (): boolean =>
 export const useSettingsStore = create<SettingsState>((set, get) => ({
   settings: {
     map_tile_url: '',
-    default_lat: 48.8566,
-    default_lng: 2.3522,
+    default_lat: 16,
+    default_lng: 107.5,
     default_zoom: 10,
     dark_mode: false,
     default_currency: 'USD',

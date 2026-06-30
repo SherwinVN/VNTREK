@@ -659,7 +659,7 @@ export function useTripPlanner() {
   }, [selectedDayId, assignments])
 
   const mapTileUrl = settings.map_tile_url || 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-  const defaultCenter = [settings.default_lat || 48.8566, settings.default_lng || 2.3522]
+  const defaultCenter = [settings.default_lat || 16, settings.default_lng || 107.5]
   const defaultZoom = settings.default_zoom || 10
 
   const fontStyle = { fontFamily: "var(--font-system)" }

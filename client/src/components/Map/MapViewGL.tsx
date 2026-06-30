@@ -159,7 +159,7 @@ export function MapViewGL({
   onMarkerClick,
   onMapClick,
   onMapContextMenu = null,
-  center = [48.8566, 2.3522],
+  center = [16, 107.5],
   zoom = 10,
   fitKey = 0,
   dayOrderMap = {},

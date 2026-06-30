@@ -393,7 +393,7 @@ export const MapView = memo(function MapView({
   onMarkerClick,
   onMapClick,
   onMapContextMenu = null,
-  center = [48.8566, 2.3522],
+  center = [16, 107.5],
   zoom = 10,
   tileUrl = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
   fitKey = 0,

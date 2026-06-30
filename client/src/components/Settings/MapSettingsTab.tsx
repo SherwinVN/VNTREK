@@ -154,8 +154,8 @@ export default function MapSettingsTab(): React.ReactElement {
   const [mapboxStyle, setMapboxStyle] = useState<string>(styleForProvider(initialProvider, slotStyle(initialProvider, settings)))
   const [mapbox3d, setMapbox3d] = useState<boolean>(settings.mapbox_3d_enabled !== false)
   const [mapboxQuality, setMapboxQuality] = useState<boolean>(settings.mapbox_quality_mode === true)
-  const [defaultLat, setDefaultLat] = useState<number | string>(settings.default_lat || 48.8566)
-  const [defaultLng, setDefaultLng] = useState<number | string>(settings.default_lng || 2.3522)
+  const [defaultLat, setDefaultLat] = useState<number | string>(settings.default_lat || 16)
+  const [defaultLng, setDefaultLng] = useState<number | string>(settings.default_lng || 107.5)
   const [defaultZoom, setDefaultZoom] = useState<number | string>(settings.default_zoom || 10)
 
   useEffect(() => {
@@ -166,8 +166,8 @@ export default function MapSettingsTab(): React.ReactElement {
     setMapboxStyle(styleForProvider(nextProvider, slotStyle(nextProvider, settings)))
     setMapbox3d(settings.mapbox_3d_enabled !== false)
     setMapboxQuality(settings.mapbox_quality_mode === true)
-    setDefaultLat(settings.default_lat || 48.8566)
-    setDefaultLng(settings.default_lng || 2.3522)
+    setDefaultLat(settings.default_lat || 16)
+    setDefaultLng(settings.default_lng || 107.5)
     setDefaultZoom(settings.default_zoom || 10)
   }, [settings])
 
@@ -432,8 +432,8 @@ export default function MapSettingsTab(): React.ReactElement {
               provider={provider}
               token={mapboxToken}
               style={mapboxStyle}
-              lat={parseFloat(String(defaultLat)) || 48.8566}
-              lng={parseFloat(String(defaultLng)) || 2.3522}
+              lat={parseFloat(String(defaultLat)) || 16}
+              lng={parseFloat(String(defaultLng)) || 107.5}
               // Zoom in close so the style's character (3D buildings,
               // satellite texture, label density) is immediately visible.
               zoom={Math.max(parseInt(String(defaultZoom)) || 10, 16)}
