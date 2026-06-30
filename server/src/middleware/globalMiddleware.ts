@@ -102,11 +102,12 @@ export function applyGlobalMiddleware(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'wasm-unsafe-eval'", "'unsafe-eval'"],
+        scriptSrc: ["'self'", "'wasm-unsafe-eval'", "'unsafe-eval'", "https://static.cloudflareinsights.com"],
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://unpkg.com"],
         imgSrc: ["'self'", "data:", "blob:", "https:"],
         connectSrc: [
           "'self'", "ws:", "wss:",
+          "https://cloudflareinsights.com",
           "https://nominatim.openstreetmap.org", "https://overpass-api.de",
           "https://places.googleapis.com", "https://api.openweathermap.org",
           "https://en.wikipedia.org", "https://commons.wikimedia.org",
