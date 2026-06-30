@@ -1,0 +1,16 @@
+FROM node:24-alpine
+WORKDIR /app
+
+RUN apk add --no-cache python3 build-base
+
+COPY package.json package-lock.json ./
+COPY shared/package.json ./shared/
+COPY server/package.json ./server/
+COPY client/package.json ./client/
+
+RUN npm ci
+
+COPY docker/dev-entrypoint.sh /usr/local/bin/dev-entrypoint.sh
+RUN chmod +x /usr/local/bin/dev-entrypoint.sh
+
+CMD ["dev-entrypoint.sh"]
