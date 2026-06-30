@@ -69,7 +69,7 @@ export default function SharedTripPage() {
     ? (assignments[String(selectedDay)] || []).map((a: any) => a.place).filter((p: any) => p?.lat && p?.lng)
     : (places || []).filter((p: any) => p?.lat && p?.lng)
 
-  const center = mapPlaces.length > 0 ? [mapPlaces[0].lat, mapPlaces[0].lng] : [48.85, 2.35]
+  const center = mapPlaces.length > 0 ? [mapPlaces[0].lat, mapPlaces[0].lng] : [16, 107.5]
 
   return (
     <div className="bg-surface-secondary" style={{ minHeight: '100vh', fontFamily: "var(--font-system)" }}>

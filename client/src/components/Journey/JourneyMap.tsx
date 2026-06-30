@@ -245,7 +245,7 @@ const JourneyMap = forwardRef<JourneyMapHandle, Props>(function JourneyMap(
           const pb = paddingBottom || 50
           map.fitBounds(L.latLngBounds(allCoords), { paddingTopLeft: [50, 50], paddingBottomRight: [50, pb], maxZoom: 16 })
         } else {
-          map.setView([30, 0], 2)
+          map.setView([16, 107.5], 4)
         }
       } catch {}
     })

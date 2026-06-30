@@ -355,7 +355,7 @@ const JourneyMapGL = forwardRef<JourneyMapGLHandle, Props>(function JourneyMapGL
     const mapOptions: Record<string, unknown> = {
       container: containerRef.current,
       style: glStyle,
-      center: hasPoints ? bounds.getCenter() : [0, 30],
+      center: hasPoints ? bounds.getCenter() : [16, 107.5],
       zoom: hasPoints ? 2 : 1,
       pitch: enableMapbox3d && fullScreen ? 45 : 0,
       attributionControl: true,
