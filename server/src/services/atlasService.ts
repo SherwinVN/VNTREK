@@ -18,7 +18,7 @@ import { CONTINENT_MAP } from '@trek/shared';
 
 const geoBundleCache = new Map<string, any>();
 
-function loadGeoBundle(name: 'admin0' | 'admin1'): any {
+function loadGeoBundle(name: 'admin0' | 'admin1' | 'vn_provinces'): any {
   const cached = geoBundleCache.get(name);
   if (cached) return cached;
   const file = path.join(__dirname, '..', '..', 'assets', 'atlas', `${name}.geojson.gz`);
@@ -37,6 +37,11 @@ function loadGeoBundle(name: 'admin0' | 'admin1'): any {
 /** Full admin-0 country-border FeatureCollection (for the client map's country layer). */
 export function getCountryGeo(): any {
   return loadGeoBundle('admin0');
+}
+
+/** Vietnam province boundaries (from vietnamese-provinces-database GIS data). */
+export function getVnProvinceGeo(): any {
+  return loadGeoBundle('vn_provinces');
 }
 
 export async function getRegionGeo(countryCodes: string[]): Promise<any> {

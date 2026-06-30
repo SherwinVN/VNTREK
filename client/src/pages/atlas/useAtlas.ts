@@ -199,8 +199,8 @@ export function useAtlas() {
     if (mapInstance.current) { mapInstance.current.remove(); mapInstance.current = null }
 
     const map = L.map(mapRef.current, {
-      center: [25, 0],
-      zoom: 3,
+      center: [16, 107.5],
+      zoom: 4,
       minZoom: 3,
       maxZoom: 10,
       zoomControl: false,
@@ -277,6 +277,21 @@ export function useAtlas() {
     return () => { map.remove(); mapInstance.current = null }
   }, [dark, loading])
 
+  // Load Vietnam province boundaries and inject into region cache so they
+  // render as interactive sub-national regions (hover/click/mark) instead of a
+  // static overlay. The data comes from vietnamese-provinces-database GIS, which
+  // has up-to-date boundaries matching VN government decrees.
+  useEffect(() => {
+    if (!mapInstance.current || loading) return
+    apiClient.get('/addons/atlas/vn-provinces/geo', { timeout: 15000 })
+      .then(res => {
+        if (!mapInstance.current) return
+        regionGeoCache.current['VN'] = res.data
+        setRegionGeoLoaded(v => v + 1)
+      })
+      .catch(() => {})
+  }, [loading])
+
   // Render GeoJSON countries
   useEffect(() => {
     if (!mapInstance.current || !geoData || !data) return
@@ -312,9 +327,9 @@ export function useAtlas() {
         const visited = visitedA3.has(a3)
         return {
           fillColor: visited ? colorForCode(a3) : (dark ? '#1e1e2e' : '#e2e8f0'),
-          fillOpacity: visited ? 0.7 : 0.3,
+          fillOpacity: visited ? 0.85 : 0.5,
           color: dark ? '#333' : '#cbd5e1',
-          weight: 0.5,
+          weight: 1.5,
         }
       },
       onEachFeature: (feature, layer) => {
@@ -457,7 +472,7 @@ export function useAtlas() {
       style: (feature) => {
         const countryA2 = (feature?.properties?.iso_a2 || '').toUpperCase()
         const visited = isVisitedFeature(feature)
-        return visited ? {
+        const s: any = visited ? {
           fillColor: a2ColorMap[countryA2] || '#6366f1',
           fillOpacity: 0.85,
           color: dark ? '#888' : '#64748b',
@@ -468,6 +483,8 @@ export function useAtlas() {
           color: dark ? '#555' : '#94a3b8',
           weight: 1,
         }
+        if (countryA2 === 'VN') { s.color = '#ef4444'; s.weight = 2 }
+        return s
       },
       onEachFeature: (feature, layer) => {
         const regionName = feature?.properties?.name || ''

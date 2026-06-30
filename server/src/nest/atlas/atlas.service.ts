@@ -9,6 +9,7 @@ import {
   getVisitedRegions,
   getRegionGeo,
   getCountryGeo,
+  getVnProvinceGeo,
   listBucketList,
   createBucketItem,
   updateBucketItem,
@@ -40,6 +41,10 @@ export class AtlasService {
 
   countryGeo() {
     return getCountryGeo();
+  }
+
+  vnProvinceGeo() {
+    return getVnProvinceGeo();
   }
 
   countryPlaces(userId: number, code: string) {

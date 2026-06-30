@@ -135,7 +135,63 @@ Mọi báo cáo lỗi hoặc yêu cầu tính năng xin vui lòng gửi tại: [
 
 ## 📊 Nguồn dữ liệu (Data sources)
 
-Ranh giới quốc gia và tỉnh/thành phố trên bản đồ Atlas được cung cấp bởi dự án [**geoBoundaries**](https://www.geoboundaries.org/) (Runfola et al., 2020), phát hành dưới giấy phép [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Chi tiết về các tài liệu và thư viện của bên thứ ba được ghi nhận đầy đủ tại [NOTICE.md](NOTICE.md).
+- Ranh giới quốc gia và tỉnh/thành phố trên bản đồ Atlas được cung cấp bởi dự án [**geoBoundaries**](https://www.geoboundaries.org/) (Runfola et al., 2020), phát hành dưới giấy phép [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- Ranh giới hành chính cấp tỉnh Việt Nam (34 tỉnh/thành phố) được cung cấp bởi [**Vietnamese Provinces Database**](https://github.com/SherwinVN/vietnamese-provinces-database), phát hành dưới giấy phép [MIT](https://github.com/SherwinVN/vietnamese-provinces-database/blob/master/LICENSE). Dữ liệu GIS có nguồn gốc từ Bản đồ đơn vị hành chính Việt Nam do Nhà xuất bản Tài nguyên — Môi trường và Bản đồ Việt Nam (Bộ Nông nghiệp và Môi trường) phát hành.
+
+Chi tiết về các tài liệu và thư viện của bên thứ ba được ghi nhận đầy đủ tại [NOTICE.md](NOTICE.md).
+
+---
+
+## 🗺️ Cập nhật dữ liệu bản đồ hành chính Việt Nam
+
+Khi [Vietnamese Provinces Database](https://github.com/SherwinVN/vietnamese-provinces-database) có bản cập nhật mới (theo nghị định của Chính phủ), làm theo các bước sau để cập nhật dữ liệu ranh giới tỉnh trên bản đồ:
+
+### Bước 1: Clone repo dữ liệu
+
+```bash
+git clone https://github.com/SherwinVN/vietnamese-provinces-database.git /tmp/vn-provinces
+cd /tmp/vn-provinces
+git pull  # lấy bản mới nhất
+```
+
+### Bước 2: Chạy script build
+
+Script tự động download GIS SQL ZIP + JSON tên tỉnh từ GitHub, parse WKT inline, không cần cài thêm dependency.
+
+```bash
+cd /path/to/VNTREK
+node scripts/build-vn-provinces.mjs
+```
+
+Script sẽ:
+1. Download JSON tên tỉnh (34 tỉnh/thành phố)
+2. Download GIS SQL ZIP (~32 MB), giải nén
+3. Parse 34 INSERT của bảng `gis_provinces`
+4. Chuyển WKT MULTIPOLYGON → GeoJSON coordinates
+5. Kết hợp tên tỉnh từ JSON
+6. Quantize coordinates (3 số lẻ ~110m)
+7. Ghi ra `server/assets/atlas/vn_provinces.geojson.gz`
+
+### Bước 3: Kiểm tra
+
+```bash
+node -e "
+  const zlib = require('zlib');
+  const fs = require('fs');
+  const geo = JSON.parse(zlib.gunzipSync(fs.readFileSync('server/assets/atlas/vn_provinces.geojson.gz')));
+  console.log('Số tỉnh:', geo.features.length);
+  console.log('Danh sách:', geo.features.map(f => f.properties.name_en).join(', '));
+"
+```
+
+### Bước 4: Commit
+
+```bash
+git add server/assets/atlas/vn_provinces.geojson.gz
+git commit -m "chore(vn-provinces): cập nhật ranh giới tỉnh theo dữ liệu mới"
+```
+
+> Dữ liệu GeoJSON được nén gzip (~1-3MB) nên commit trực tiếp vào git là an toàn. Server sẽ tự động load bản mới sau khi deploy.
 
 ## 📄 Giấy phép (License)
 

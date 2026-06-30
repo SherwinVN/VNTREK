@@ -233,6 +233,43 @@ async function main() {
   }
 
   write('admin0', adm0Features)
+
+  // Patch Vietnam admin0: merge Hoàng Sa & Trường Sa islands so the country boundary
+  // includes both archipelagos at the zoomed-out country level. The islands come from
+  // the separate vn_provinces build (scripts/build-vn-provinces.mjs). If that file
+  // exists, inject their MultiPolygon coordinates into VNM's geometry.
+  try {
+    const vnpFile = path.join(OUT_DIR, 'vn_provinces.geojson.gz')
+    if (fs.existsSync(vnpFile)) {
+      const vnp = JSON.parse(zlib.gunzipSync(fs.readFileSync(vnpFile)))
+      const vnIdx = adm0Features.findIndex(f => f.properties.ADM0_A3 === 'VNM')
+      if (vnIdx >= 0) {
+        const vn = adm0Features[vnIdx]
+        const vnCoords = vn.geometry.type === 'MultiPolygon' ? vn.geometry.coordinates : [vn.geometry.coordinates]
+        const islandNames = ['Đặc khu Hoàng Sa', 'Đặc khu Trường Sa']
+        let patched = false
+        for (const name of islandNames) {
+          const island = vnp.features.find(f => f.properties.name === name)
+          if (!island || !island.geometry) continue
+          const coords = island.geometry.type === 'MultiPolygon' ? island.geometry.coordinates : [island.geometry.coordinates]
+          for (const poly of coords) {
+            const qPolys = poly.map(r => quantizeRing(r, ADM0_DECIMALS)).filter(r => r.length >= 4)
+            if (qPolys.length) vnCoords.push(qPolys)
+          }
+          patched = true
+        }
+        if (patched) {
+          vn.geometry = { type: 'MultiPolygon', coordinates: vnCoords }
+          adm0Features[vnIdx] = vn
+          write('admin0', adm0Features) // re-write with islands
+          console.log(`[atlas-geo] merged 2 islands into VNM (${vnCoords.length} polygon groups)`)
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('[atlas-geo] could not patch VNM islands:', err.message)
+  }
+
   write('admin1', adm1Features)
 
   const missing1 = COUNTRIES.filter((a3, i) => !normalizeAdm1(adm1Raw[i], a3, '').length)
